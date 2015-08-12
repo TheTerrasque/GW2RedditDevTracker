@@ -1,3 +1,9 @@
+var INFO_LOADED = 0;
+
+function updateLoadInfo(dev) {
+  INFO_LOADED += 1;
+  $("#loadpercent").text(Math.round(INFO_LOADED / ARENANET_DEVELOPERS.length * 100));
+}
 $(document).ready(function () {
   // firstly lets promise ourselves a subreddit reference
   var subredditPromise = Promise.resolve($.ajax(REDDIT_API_URL + 'r/' + SUBREDDIT_NAME + '/about.json'));
@@ -104,6 +110,10 @@ function createDevPromise (devname, subreddit_id) {
     });
 
     // return the array that we modified inplace
+    return result;
+  }).then(function (result) {
+    console.log("Loaded dev " + devname);
+    updateLoadInfo(devname);
     return result;
   }).then(function (result) {
     // no need to keep anything more then the children array
